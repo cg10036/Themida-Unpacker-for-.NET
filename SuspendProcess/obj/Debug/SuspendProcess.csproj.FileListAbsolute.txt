@@ -1,0 +1,7 @@
+C:\Users\사용자-PC\source\repos\SuspendProcess\SuspendProcess\obj\Debug\SuspendProcess.csprojAssemblyReference.cache
+C:\Users\사용자-PC\source\repos\SuspendProcess\SuspendProcess\obj\Debug\SuspendProcess.csproj.CoreCompileInputs.cache
+C:\Users\사용자-PC\source\repos\SuspendProcess\SuspendProcess\bin\Debug\SuspendProcess.exe.config
+C:\Users\사용자-PC\source\repos\SuspendProcess\SuspendProcess\bin\Debug\SuspendProcess.exe
+C:\Users\사용자-PC\source\repos\SuspendProcess\SuspendProcess\bin\Debug\SuspendProcess.pdb
+C:\Users\사용자-PC\source\repos\SuspendProcess\SuspendProcess\obj\Debug\SuspendProcess.exe
+C:\Users\사용자-PC\source\repos\SuspendProcess\SuspendProcess\obj\Debug\SuspendProcess.pdb
