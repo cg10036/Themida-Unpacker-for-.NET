@@ -18,6 +18,12 @@ you have to install vbruntime and .NET runtime etc.... JUST INSTALL VISUAL STUDI
 
 Search DLLS, if "clrjit.dll" found, suspend process and dump.
 
+## What should I do after dump?
+
+just de4dot it!
+
+https://github.com/0xd4d/de4dot
+
 ## Thanks to...
 
 hofingerandi
