@@ -8,7 +8,9 @@ Support all version! (Tested in 1.x, 2.x, 3.x)
 
 ## How to use?
 
-Just drag .NET file and select pd.exe!
+goto SuspendProcess/bin/Release/ folder
+
+Just drag .NET file and select pd.exe! (32bit to 32bit, 64bit to 64bit)
 
 pd.exe will dump file! if not, just manual dump with SCYLLA!!!!!
 
