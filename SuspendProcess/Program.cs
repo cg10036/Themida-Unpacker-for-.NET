@@ -88,7 +88,7 @@ namespace SuspendProcess
         [STAThread]
         static void Main(string[] args)
         {
-            MessageBox.Show("Themida_1.x/2.x_+_Antidump_Unpacker\nMadeby SUNRIN-LEESOOHYUK");
+            MessageBox.Show("Themida_1.x/2.x_+_Antidump_Unpacker\nMadeby cg10036");
             if (args.Length < 1)
             {
                 MessageBox.Show("usage : Just Drag & Drop Like DE4DOT");
