@@ -1,6 +1,6 @@
 # Themida Unpacker for .NET
 
-## what is Themida Unpacker for .NET?
+## What is Themida Unpacker for .NET?
 
 Themida Unpacker for .NET is a tool developed to quickly and easily unpack packed .NET files.
 
