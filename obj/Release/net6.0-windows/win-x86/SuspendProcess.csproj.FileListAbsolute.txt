@@ -1,0 +1,11 @@
+C:\Users\Modz2014\Desktop\Themida-Unpacker-for-.NET-master\SuspendProcess\bin\Release\net6.0-windows\win-x86\SuspendProcess.deps.json
+C:\Users\Modz2014\Desktop\Themida-Unpacker-for-.NET-master\SuspendProcess\bin\Release\net6.0-windows\win-x86\SuspendProcess.runtimeconfig.json
+C:\Users\Modz2014\Desktop\Themida-Unpacker-for-.NET-master\SuspendProcess\obj\Release\net6.0-windows\win-x86\SuspendProcess.csproj.AssemblyReference.cache
+C:\Users\Modz2014\Desktop\Themida-Unpacker-for-.NET-master\SuspendProcess\obj\Release\net6.0-windows\win-x86\SuspendProcess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Modz2014\Desktop\Themida-Unpacker-for-.NET-master\SuspendProcess\obj\Release\net6.0-windows\win-x86\SuspendProcess.csproj.CoreCompileInputs.cache
+C:\Users\Modz2014\Desktop\Themida-Unpacker-for-.NET-master\SuspendProcess\obj\Release\net6.0-windows\win-x86\SuspendProcess.TrustInfo.xml
+C:\Users\Modz2014\Desktop\Themida-Unpacker-for-.NET-master\SuspendProcess\obj\Release\net6.0-windows\win-x86\SuspendProcess.genruntimeconfig.cache
+C:\Users\Modz2014\Desktop\Themida-Unpacker-for-.NET-master\SuspendProcess\obj\Release\net6.0-windows\win-x86\SuspendProcess.dll.manifest
+C:\Users\Modz2014\Desktop\Themida-Unpacker-for-.NET-master\SuspendProcess\obj\Release\net6.0-windows\win-x86\SuspendProcess.dll
+C:\Users\Modz2014\Desktop\Themida-Unpacker-for-.NET-master\SuspendProcess\obj\Release\net6.0-windows\win-x86\refint\SuspendProcess.dll
+C:\Users\Modz2014\Desktop\Themida-Unpacker-for-.NET-master\SuspendProcess\obj\Release\net6.0-windows\win-x86\SuspendProcess.pdb
