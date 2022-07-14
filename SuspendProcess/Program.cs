@@ -1,157 +1,149 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
-namespace SuspendProcess
+namespace SuspendProcess;
+
+internal class Program
 {
-    class Program
-    {
-        [Flags]
-        public enum ThreadAccess : int
-        {
-            TERMINATE = (0x0001),
-            SUSPEND_RESUME = (0x0002),
-            GET_CONTEXT = (0x0008),
-            SET_CONTEXT = (0x0010),
-            SET_INFORMATION = (0x0020),
-            QUERY_INFORMATION = (0x0040),
-            SET_THREAD_TOKEN = (0x0080),
-            IMPERSONATE = (0x0100),
-            DIRECT_IMPERSONATION = (0x0200)
-        }
+	[Flags]
+	public enum ThreadAccess
+	{
+		TERMINATE = 1,
+		SUSPEND_RESUME = 2,
+		GET_CONTEXT = 8,
+		SET_CONTEXT = 0x10,
+		SET_INFORMATION = 0x20,
+		QUERY_INFORMATION = 0x40,
+		SET_THREAD_TOKEN = 0x80,
+		IMPERSONATE = 0x100,
+		DIRECT_IMPERSONATION = 0x200
+	}
 
-        [DllImport("kernel32.dll")]
-        static extern IntPtr OpenThread(ThreadAccess dwDesiredAccess, bool bInheritHandle, uint dwThreadId);
-        [DllImport("kernel32.dll")]
-        static extern uint SuspendThread(IntPtr hThread);
-        [DllImport("kernel32.dll")]
-        static extern int ResumeThread(IntPtr hThread);
-        [DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern bool CloseHandle(IntPtr handle);
+	[STAThread]
+	private static void SuspendProcess()
+	{
+		CreateDLLInMemory(Application.StartupPath + "\\\\clrjit.dll", Assembly.GetExecutingAssembly().GetManifestResourceStream("SuspendProcess.res.clrjit.bin"));
+	}
 
+	private static void CreateDLLInMemory(string strVirtualPath, Stream stream)
+	{
+		_ = new byte[1024];
+	}
 
-        static void SuspendProcess(int pid)
-        {
-            var process = Process.GetProcessById(pid);
+	[DllImport("kernel32.dll")]
+	private static extern IntPtr OpenThread(ThreadAccess dwDesiredAccess, bool bInheritHandle, uint dwThreadId);
 
-            if (process.ProcessName == string.Empty)
-                return;
+	[DllImport("kernel32.dll")]
+	private static extern uint SuspendThread(IntPtr hThread);
 
-            foreach (ProcessThread pT in process.Threads)
-            {
-                IntPtr pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)pT.Id);
+	[DllImport("kernel32.dll")]
+	private static extern int ResumeThread(IntPtr hThread);
 
-                if (pOpenThread == IntPtr.Zero)
-                {
-                    continue;
-                }
+	[DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)]
+	private static extern bool CloseHandle(IntPtr handle);
 
-                SuspendThread(pOpenThread);
+	private static void SuspendProcess(int pid)
+	{
+		Process processById = Process.GetProcessById(pid);
+		if (processById.ProcessName == string.Empty)
+		{
+			return;
+		}
+		foreach (ProcessThread thread in processById.Threads)
+		{
+			IntPtr intPtr = OpenThread(ThreadAccess.SUSPEND_RESUME, bInheritHandle: false, (uint)thread.Id);
+			if (!(intPtr == IntPtr.Zero))
+			{
+				SuspendThread(intPtr);
+				CloseHandle(intPtr);
+			}
+		}
+	}
 
-                CloseHandle(pOpenThread);
-            }
-        }
+	private static void ResumeProcess(int pid)
+	{
+		Process processById = Process.GetProcessById(pid);
+		if (processById.ProcessName == string.Empty)
+		{
+			return;
+		}
+		foreach (ProcessThread thread in processById.Threads)
+		{
+			IntPtr intPtr = OpenThread(ThreadAccess.SUSPEND_RESUME, bInheritHandle: false, (uint)thread.Id);
+			if (!(intPtr == IntPtr.Zero))
+			{
+				int num = 0;
+				do
+				{
+					num = ResumeThread(intPtr);
+				}
+				while (num > 0);
+				CloseHandle(intPtr);
+			}
+		}
+	}
 
-        static void ResumeProcess(int pid)
-        {
-            var process = Process.GetProcessById(pid);
+	[STAThread]
+	private static void Main(string[] args)
+	{
+		MessageBox.Show("Themida_1.x/2.x_+_Antidump_Unpacker\nMadeby cg10036");
+		if (args.Length < 1)
+		{
+			MessageBox.Show("usage : Just Drag & Drop Like DE4DOT");
+			return;
+		}
+		string fileName = "";
+		OpenFileDialog openFileDialog = new OpenFileDialog();
+		openFileDialog.Filter = "PD File (pd.exe)|pd.exe";
+		openFileDialog.FileName = "Select pd.exe";
+		openFileDialog.ShowDialog();
+		if (openFileDialog.FileName.Length > 0)
+		{
+			fileName = openFileDialog.FileName;
+		}
+		try
+		{
+			string text = args[0];
+			Process process = new Process();
+			process.StartInfo.FileName = text;
+			process.Start();
+			int id = process.Id;
+			Console.WriteLine("WAIT...");
+			while (!modules(id))
+			{
+			}
+			SuspendProcess(id);
+			Console.WriteLine("Founded clrjit.dll -> LOADED .NET");
+			if (MessageBox.Show("May I AutoDump?", "Question", MessageBoxButtons.YesNo) == DialogResult.Yes)
+			{
+				Process.Start(fileName, "-pid " + Convert.ToInt32(id));
+				MessageBox.Show("DUMPED! If error occurs, please dump it manually");
+				process.Kill();
+				return;
+			}
+			MessageBox.Show("DUMP IT with SCYLLA! " + Path.GetFileName(text) + " PID : " + Convert.ToInt32(id) + "\nCheck Option : \nUse OriginalFirstThunk\nScan for Direct Imports\nFix Direct Imports UNIVERSAL\nUpdate header checksum\nCreate backup\nEnable debug privileges\nUse advanced IAT search\nRead APIs always from disk");
+			process.Kill();
+		}
+		catch
+		{
+			MessageBox.Show("Unknown Error : run as Administrator and 32bit to _32, 64bit to _64");
+		}
+	}
 
-            if (process.ProcessName == string.Empty)
-                return;
-
-            foreach (ProcessThread pT in process.Threads)
-            {
-                IntPtr pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)pT.Id);
-
-                if (pOpenThread == IntPtr.Zero)
-                {
-                    continue;
-                }
-
-                var suspendCount = 0;
-                do
-                {
-                    suspendCount = ResumeThread(pOpenThread);
-                } while (suspendCount > 0);
-
-                CloseHandle(pOpenThread);
-            }
-        }
-
-        [STAThread]
-        static void Main(string[] args)
-        {
-            MessageBox.Show("Themida_1.x/2.x_+_Antidump_Unpacker\nMadeby cg10036");
-            if (args.Length < 1)
-            {
-                MessageBox.Show("usage : Just Drag & Drop Like DE4DOT");
-                return;
-            }
-            string pd_path = "";
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "PD File (pd.exe)|pd.exe";
-            ofd.FileName = "Select pd.exe";
-            ofd.ShowDialog();
-            if(ofd.FileName.Length > 0)
-            {
-                pd_path = ofd.FileName;
-            }
-            try
-            {
-                int pid;
-                string path = args[0];
-                Process p = new Process();
-                p.StartInfo.FileName = path;
-                p.Start();
-                pid = p.Id;
-                Console.WriteLine("WAIT...");
-                while (true)
-                {
-                    if (modules(pid))
-                    {
-                        SuspendProcess(pid);
-                        Console.WriteLine("Founded clrjit.dll -> LOADED .NET");
-                        if(MessageBox.Show("May I AutoDump?", "Question", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                        {
-                            Process.Start(pd_path, "-pid " + Convert.ToInt32(pid));
-                            MessageBox.Show("DUMPED! If error occurs, please dump it manually");
-                            p.Kill();
-                            return;
-                        }
-                        else
-                        {
-                            MessageBox.Show("DUMP IT with SCYLLA! " + Path.GetFileName(path) + " PID : " + Convert.ToInt32(pid) + "\nCheck Option : \nUse OriginalFirstThunk\nScan for Direct Imports\nFix Direct Imports UNIVERSAL\nUpdate header checksum\nCreate backup\nEnable debug privileges\nUse advanced IAT search\nRead APIs always from disk");
-                            p.Kill();
-                            return;
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Unknown Error : run as Administrator and 32bit to _32, 64bit to _64");
-            }
-        }
-
-        static bool modules(int pid)
-        {
-            Process p = Process.GetProcessById(pid);
-            ProcessModule pm;
-            ProcessModuleCollection pmc = p.Modules;
-            for (int i = 0; i < pmc.Count; i++)
-            {
-                pm = pmc[i];
-                if (pm.ModuleName.ToLower() == "clrjit.dll")
-                    return true;
-            }
-            return false;
-        }
-    }
+	private static bool modules(int pid)
+	{
+		ProcessModuleCollection processModuleCollection = Process.GetProcessById(pid).Modules;
+		for (int i = 0; i < processModuleCollection.Count; i++)
+		{
+			if (processModuleCollection[i].ModuleName.ToLower() == "clrjit.dll")
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }
