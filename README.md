@@ -18,8 +18,6 @@ Just drag .NET file and select pd.exe! (32bit to 32bit, 64bit to 64bit)
 
 pd.exe will dump file! if not, just manual dump with SCYLLA!!!!!
 
-you have to install vbruntime and .NET runtime etc.... JUST INSTALL VISUAL STUDIO .NET, C++, Universal Windows Platform!!!!!! :)
-
 ## How it works?
 
 Search DLLS, if "clrjit.dll" found, suspend process and dump.
